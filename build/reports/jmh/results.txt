@@ -1,0 +1,11 @@
+Benchmark                                                                            Mode  Cnt     Score      Error  Units
+e.j.f.h.kafka.test.LoadBalancingBenchmark.kafkaProducersConsumers                   thrpt    3  1313,344 ±  261,385  ops/s
+e.j.f.h.kafka.test.LoadBalancingMultipleConsumersBenchmark.kafkaProducersConsumers  thrpt    3     4,597 ±    0,087  ops/s
+e.j.f.h.kafka.test.MultipleConsumersBenchmark.kafkaProducersConsumers               thrpt    3     4,592 ±    0,012  ops/s
+e.j.f.h.kafka.test.SimpleConfigurationBenchmark.kafkaProducersConsumers             thrpt    3  1316,543 ±  534,475  ops/s
+e.j.f.h.kafka.test.StressTestBenchmark.kafkaProducersConsumers                      thrpt    3     1,020 ±    0,024  ops/s
+e.j.f.h.rabbit.test.LoadBalancingBenchmark.rabbitProducerConsumer                   thrpt    3   454,788 ± 1708,907  ops/s
+e.j.f.h.rabbit.test.LoadBalancingMultipleConsumersBenchmark.rabbitProducerConsumer  thrpt    3   137,757 ±  494,281  ops/s
+e.j.f.h.rabbit.test.MultipleConsumersBenchmark.rabbitProducerConsumer               thrpt    3   140,859 ±  653,608  ops/s
+e.j.f.h.rabbit.test.SimpleConfigurationBenchmark.rabbitProducerConsumer             thrpt    3   405,926 ±  897,690  ops/s
+e.j.f.h.rabbit.test.StressTestBenchmark.rabbitProducerConsumer                      thrpt    3    41,339 ±  179,155  ops/s
