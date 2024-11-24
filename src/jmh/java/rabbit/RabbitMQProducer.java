@@ -29,15 +29,22 @@ public class RabbitMQProducer {
         channel.queueDeclare(QUEUE_NAME, true, false, false, null);
     }
 
-
     public void sendMessage(String message) throws IOException {
-        channel.basicPublish("", QUEUE_NAME, null, message.getBytes());
+        try {
+            channel.basicPublish("", QUEUE_NAME, null, message.getBytes());
+        } catch (IOException e) {
+            throw new IOException("Error during message send", e);
+        }
     }
 
     public void close() {
         try {
-            channel.close();
-            connection.close();
+            if (channel != null && channel.isOpen()) {
+                channel.close();
+            }
+            if (connection != null && connection.isOpen()) {
+                connection.close();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

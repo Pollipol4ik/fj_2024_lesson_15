@@ -16,6 +16,6 @@ import java.util.concurrent.TimeUnit;
 @State(Scope.Thread)
 @Fork(1)
 @Warmup(iterations = 1)
-@Measurement(iterations = 3)
+@Measurement(iterations = 10)
 public abstract class BaseBenchmark {
 }

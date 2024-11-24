@@ -53,7 +53,6 @@ public abstract class RabbitMQBenchmarkBase extends BaseBenchmark {
             } catch (IOException e) {
                 throw new RuntimeException("Ошибка отправки сообщения", e);
             }
-            blackhole.consume(producer);
         });
 
         consumers.forEach(consumer -> {
@@ -63,8 +62,8 @@ public abstract class RabbitMQBenchmarkBase extends BaseBenchmark {
             } catch (IOException e) {
                 throw new RuntimeException("Ошибка получения сообщения", e);
             }
-            blackhole.consume(consumer);
         });
+
 
         blackhole.consume(producers);
         blackhole.consume(consumers);

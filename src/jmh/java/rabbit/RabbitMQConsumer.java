@@ -14,7 +14,6 @@ public class RabbitMQConsumer {
     private final Connection connection;
     private final Channel channel;
 
-
     public RabbitMQConsumer() throws IOException, TimeoutException {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
@@ -27,21 +26,31 @@ public class RabbitMQConsumer {
     }
 
     public String consumeMessage() throws IOException {
-        DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-            String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
-        };
+        try {
+            final String[] messageWrapper = new String[1];  // To store message
+            DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+                String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
+                messageWrapper[0] = message;
+            };
 
-        return channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> {
-        });
+            channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> {
+            });
+            while (messageWrapper[0] == null) {
+                Thread.sleep(10);
+            }
+            return messageWrapper[0];
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IOException("Message consumption interrupted", e);
+        }
     }
-
 
     public void close() {
         try {
-            if (channel != null) {
+            if (channel != null && channel.isOpen()) {
                 channel.close();
             }
-            if (connection != null) {
+            if (connection != null && connection.isOpen()) {
                 connection.close();
             }
         } catch (Exception e) {
