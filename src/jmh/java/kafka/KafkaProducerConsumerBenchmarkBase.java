@@ -1,10 +1,12 @@
-package edu.java.fintechcourse2024.hw15.kafka;
+package kafka;
 
-import edu.java.fintechcourse2024.hw15.BaseBenchmark;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.Level;
+import org.openjdk.jmh.annotations.Setup;
+import org.openjdk.jmh.annotations.TearDown;
 import org.openjdk.jmh.infra.Blackhole;
 
 import java.time.Duration;
@@ -27,27 +29,36 @@ public abstract class KafkaProducerConsumerBenchmarkBase extends BaseBenchmark {
     @Setup(Level.Trial)
     public void setup() {
         producers = new ArrayList<>();
-        Properties producerProps = new Properties();
-        producerProps.put("bootstrap.servers", "localhost:29092");
-        producerProps.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        producerProps.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        consumers = new ArrayList<>();
 
+        Properties producerProps = createKafkaProducerProperties();
         for (int i = 0; i < numberOfProducers; i++) {
             producers.add(new KafkaProducer<>(producerProps));
         }
 
-        consumers = new ArrayList<>();
-        Properties consumerProps = new Properties();
-        consumerProps.put("bootstrap.servers", "localhost:29092");
-        consumerProps.put("group.id", "test-group");
-        consumerProps.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        consumerProps.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-
+        Properties consumerProps = createKafkaConsumerProperties();
         for (int i = 0; i < numberOfConsumers; i++) {
             KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerProps);
             consumer.subscribe(List.of("test-topic"));
             consumers.add(consumer);
         }
+    }
+
+    private Properties createKafkaProducerProperties() {
+        Properties props = new Properties();
+        props.put("bootstrap.servers", "localhost:29092");
+        props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        return props;
+    }
+
+    private Properties createKafkaConsumerProperties() {
+        Properties props = new Properties();
+        props.put("bootstrap.servers", "localhost:29092");
+        props.put("group.id", "test-group");
+        props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        return props;
     }
 
     @TearDown(Level.Trial)
@@ -61,15 +72,14 @@ public abstract class KafkaProducerConsumerBenchmarkBase extends BaseBenchmark {
         producers.forEach(producer -> {
             var sendFuture = producer.send(new ProducerRecord<>("test-topic", "key", "value"));
             blackhole.consume(sendFuture);
-            blackhole.consume(producer);
         });
+
         consumers.forEach(consumer -> {
-            var message = consumer.poll(Duration.ofMillis(100));
-            blackhole.consume(message);
-            blackhole.consume(consumer);
+            var messages = consumer.poll(Duration.ofMillis(100));
+            blackhole.consume(messages);
         });
+
         blackhole.consume(producers);
         blackhole.consume(consumers);
     }
 }
-

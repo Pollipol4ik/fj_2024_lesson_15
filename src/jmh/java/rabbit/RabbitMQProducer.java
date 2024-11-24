@@ -1,9 +1,8 @@
-package edu.java.fintechcourse2024.hw15.rabbit;
+package rabbit;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-import lombok.Getter;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;

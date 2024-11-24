@@ -1,6 +1,6 @@
-package edu.java.fintechcourse2024.hw15.rabbit.test;
+package rabbit.test;
 
-import edu.java.fintechcourse2024.hw15.rabbit.RabbitMQBenchmarkBase;
+import rabbit.RabbitMQBenchmarkBase;
 
 public class SimpleConfigurationBenchmark extends RabbitMQBenchmarkBase {
     public SimpleConfigurationBenchmark() {

@@ -1,6 +1,5 @@
-package edu.java.fintechcourse2024.hw15.rabbit;
+package rabbit;
 
-import edu.java.fintechcourse2024.hw15.BaseBenchmark;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.Level;
 import org.openjdk.jmh.annotations.Setup;
@@ -48,23 +47,25 @@ public abstract class RabbitMQBenchmarkBase extends BaseBenchmark {
     public void rabbitProducerConsumer(Blackhole blackhole) {
         producers.forEach(producer -> {
             try {
-                var message = "Тестовое сообщение " + producer.getIndex();
+                String message = "Тестовое сообщение " + producer.getIndex();
                 producer.sendMessage(message);
                 blackhole.consume(message);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("Ошибка отправки сообщения", e);
             }
             blackhole.consume(producer);
         });
+
         consumers.forEach(consumer -> {
             try {
-                var message = consumer.consumeMessage();
+                String message = consumer.consumeMessage();
                 blackhole.consume(message);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("Ошибка получения сообщения", e);
             }
             blackhole.consume(consumer);
         });
+
         blackhole.consume(producers);
         blackhole.consume(consumers);
     }

@@ -1,7 +1,7 @@
-package edu.java.fintechcourse2024.hw15.kafka.test;
+package kafka.test;
 
-import edu.java.fintechcourse2024.hw15.kafka.KafkaProducerConsumerBenchmarkBase;
 
+import kafka.KafkaProducerConsumerBenchmarkBase;
 
 public class LoadBalancingMultipleConsumersBenchmark extends KafkaProducerConsumerBenchmarkBase {
     public LoadBalancingMultipleConsumersBenchmark() {
