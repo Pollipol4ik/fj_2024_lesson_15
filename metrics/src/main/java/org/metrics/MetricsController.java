@@ -21,7 +21,7 @@ public class MetricsController {
     private final Counter customMetricCounter;
 
     public MetricsController(MeterRegistry meterRegistry) {
-        this.customMetricCounter = meterRegistry.counter("custom_requests", "endpoint", "/custom");
+        this.customMetricCounter = meterRegistry.counter("custom_requests_total", "endpoint", "/custom");
     }
 
     @GetMapping("/log")
